@@ -1,0 +1,30 @@
+body {
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+#wrapper {
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+#main-canvas {
+	/*height: 100vh;
+	width: 100vw;*/
+}
+
+.celestial-body {
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	color: red;
+	cursor: pointer;
+	//transition: top bottom 50ms;
+	transition: box-shadow 300ms;
+
+	&.selected {
+		box-shadow: rgba(255, 255, 255, 0.4) 0px 0px 10px 5px;
+	}
+}
