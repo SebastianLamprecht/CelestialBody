@@ -3,16 +3,16 @@ const G = 6.6743015 * 10 ** -11;
 const AU = 149597870.7;
 
 var timeScale = 0.2;
-var radiusScale = 20;
+var radiusScale = 10;
 // So 1 AE = 200px
-var KmPerPixel = AU / 400;
+var KmPerPixel;
 
 var canvas;
 var ctx;
 
 var animationRunning = true;
 
-var Sun;
+var Central;
 
 $(document).ready(function() {
 	canvas = document.getElementById("main-canvas");
@@ -21,15 +21,28 @@ $(document).ready(function() {
 
 	CelestialBodyUI.init(canvas);
 
-	Sun = new CelestialBody({"name" : "Sun", "mass" : 1.9885 * 10 ** 30, "density" : 1.408, "color" : "#fff", "x" : 0, "y" : 0});
-	new CelestialBody({"name" : "Mercury", "mass" : 3.3011 * 10 ** 23, "density" : 5.427, "color" : "#666564"}).setOrbit(Sun, 0.387 * AU);
-	new CelestialBody({"name" : "Venus", "mass" : 4.875 * 10 ** 24, "density" : 5.243, "color" : "#e8e1c0"}).setOrbit(Sun, 0.723 * AU);
-	new CelestialBody({"name" : "Earth", "mass" : 5.9772 * 10 ** 24, "density" : 5.514, "color" : "#3b66cc"}).setOrbit(Sun, AU);
-    new CelestialBody({"name" : "Mars", "mass" : 6.417 * 10 ** 23, "density" : 3.933, "color" : "#cc521e"}).setOrbit(Sun, 1.524 * AU);
-	new CelestialBody({"name" : "Jupiter", "mass" : 1.899 * 10 ** 27, "density" : 15, "color" : "#f9e581"}).setOrbit(Sun, 5.204 * AU);
+	earthSystem();
 
 	CelestialBodyUI.tick();
 });
+
+function earthSystem() {
+	KmPerPixel = 1000;
+
+	Central = new CelestialBody({"name" : "Earth", "mass" : 5.9722 * 10 ** 24, "density" : 5.514, "color" : "#3b66cc", "x" : 0, "y" : 0});
+	new CelestialBody({"name" : "Moon", "mass" : 7.342 * 10 ** 22, "density" : 3.344, "color" : "#666564"}).setOrbit(Central, 384399) ;
+}
+
+function solarSystem() {
+	KmPerPixel = AU / 400;
+
+	Central = new CelestialBody({"name" : "Sun", "mass" : 1.9885 * 10 ** 30, "density" : 1.408, "color" : "#fff", "x" : 0, "y" : 0});
+	new CelestialBody({"name" : "Mercury", "mass" : 3.3011 * 10 ** 23, "density" : 5.427, "color" : "#666564"}).setOrbit(Central, 0.387 * AU);
+	new CelestialBody({"name" : "Venus", "mass" : 4.875 * 10 ** 24, "density" : 5.243, "color" : "#e8e1c0"}).setOrbit(Central, 0.723 * AU);
+	new CelestialBody({"name" : "Earth", "mass" : 5.9772 * 10 ** 24, "density" : 5.514, "color" : "#3b66cc"}).setOrbit(Central, AU);
+    new CelestialBody({"name" : "Mars", "mass" : 6.417 * 10 ** 23, "density" : 3.933, "color" : "#cc521e"}).setOrbit(Central, 1.524 * AU);
+	new CelestialBody({"name" : "Jupiter", "mass" : 1.899 * 10 ** 27, "density" : 15, "color" : "#f9e581"}).setOrbit(Central, 5.204 * AU);
+}
 
 function drawVector(x, y, Vec, style) {
 	ctx.beginPath();
@@ -82,7 +95,7 @@ class CelestialBodyUI {
 			c.fillText(this.name, x + 15, y + 4);
 			c.fillStyle = "#fff";
 			c.fillText(Math.round(this.Velocity.length()) + " km/s", x + 15, y + 20);
-			c.fillText((new Vector(Sun.x - this.x, Sun.y - this.y).length() / AU).toFixed(5) + " AU", x + 15, y + 36);
+			c.fillText((new Vector(Central.x - this.x, Central.y - this.y).length() / AU).toFixed(5) + " AU", x + 15, y + 36);
 
 			// Draw breadcrumbs
 			c.beginPath();
